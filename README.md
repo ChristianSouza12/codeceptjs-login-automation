@@ -59,7 +59,7 @@ Esses cenários garantem uma cobertura sólida e realista do comportamento esper
 **Christian Souza**
 QA em desenvolvimento | Automação | Testes Funcionais | JavaScript | CodeceptJS | Cypress
 
-🔗 GitHub: https://github.com/christiansouzaa
+🔗 GitHub: https://github.com/ChristianSouza12
 
 🔗 LinkedIn: https://www.linkedin.com/in/christian-souzaa/
 
