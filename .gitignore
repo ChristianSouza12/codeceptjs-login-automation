@@ -1,0 +1,14 @@
+# Node
+node_modules/
+
+# CodeceptJS output
+output/
+
+# Logs
+*.log
+
+# Env vars
+.env
+
+# OS files
+.DS_Store
