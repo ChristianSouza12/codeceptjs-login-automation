@@ -1,117 +1,95 @@
+const LoginPage = require("../pages/LoginPage")
+const userFactory = require("../factories/userFactory")
+
 Feature('login');
 
-Scenario('Login com sucesso',  ({ I }) => {
+Before(({ I }) => {
+    I.amOnPage("/")
+    I.click("Login")
+})
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','teste@teste.com')
-    I.fillField('#password','123456')
-    I.click('#btnLogin')
-    I.waitForText('Login realizado',5)
+Scenario('Login com credenciais válidas devem ser realizada com sucesso!', ({ I }) => {
 
-}) // .tag('@Sucesso') // Usar a tag para rodar esse cenário específico.
+    LoginPage.login("teste@teste.com", "123456")
+    LoginPage.seeSuccess()
 
-Scenario('Tentando Logar digitando apenas o e-mail',  ({ I }) => {
+}).tag('@login').tag('@smoke') // principal
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','teste@teste.com')
-    I.click('#btnLogin')
-    I.waitForText('Senha inválida.',5)
+Scenario('Login apenas com email deve exibir erro de senha obrigatória.', ({ I }) => {
 
+    const user = userFactory.createUser()
+    LoginPage.login(user.email,"")
+    LoginPage.seeErrorPassword()
 
-});
+}).tag('@login').tag('@negative')
 
-Scenario('Tentando logar sem digitar e-mail e senha',  ({ I }) => {
+Scenario('Login sem email e sem senha deve exibir mensagem de email inválido.', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.click('#btnLogin')
-    I.waitForText('E-mail inválido.',5)
+    I.waitForElement('#user', 5);
+    LoginPage.login("" , "")
+    LoginPage.seeErrorEmail()
 
-});
+}).tag('@login').tag('@negative')
 
-Scenario('Tentando Logar digitando apenas a senha',  ({ I }) => {
+Scenario('Login apenas com senha deve exibir mensagem de email inválido.', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#password','123456')
-    I.click('#btnLogin')
-    I.waitForText('E-mail inválido.',5)
+    const user = userFactory.createUser()
+    LoginPage.login("" , user.password)
+    LoginPage.seeErrorEmail()
 
-});
+}).tag('@login').tag('@negative')
 
-Scenario('Email inválido formatado incorretamente',  ({ I }) => {
+Scenario('Login com email em formato inválido deve exibir mensagem de email inválido.', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','testeteste.com')
-    I.fillField('#password','123456')
-    I.click('#btnLogin')
-    I.waitForText('E-mail inválido.',5)
+    const user = userFactory.createUser()
+    LoginPage.login("testetes.com" , user.password)
+    LoginPage.seeErrorEmail()
 
-});
+}).tag('@login').tag('@negative')
 
-Scenario('Senha incorreta',  ({ I }) => {
+Scenario('Login com senha incorreta deve exibir mensagem de senha inválida', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','teste@teste.com')
-    I.fillField('#password','12345')
-    I.click('#btnLogin')
-    I.waitForText('Senha inválida.',5)
+    const user = userFactory.createUser()
+    LoginPage.login(user.email, "12345")
+    LoginPage.seeErrorPassword()
 
-});
+}).tag('@login').tag('@negative')
 
-Scenario('Campos preenchidos com espaços em branco',  ({ I }) => {
+Scenario('Login com campos preenchidos com espaços deve exibir mensagem de email inválido.', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','      ')
-    I.fillField('#password','     ')
-    I.click('#btnLogin')
-    I.waitForText('E-mail inválido.',5)
+    LoginPage.login("           " , "        ")
+    LoginPage.seeErrorEmail()
 
-});
+}).tag('@login').tag('@negative')
 
-Scenario('E-mail válido e senha vazia',  ({ I }) => {
+Scenario('Login com email válido e senha vazia deve exibir mensagem de senha inválida', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','teste@teste.com')
-    I.fillField('#password','')
-    I.click('#btnLogin')
-    I.waitForText('Senha inválida.',5)
+    const user = userFactory.createUser()
+    LoginPage.login(user.email , "")
+    LoginPage.seeErrorPassword()
 
-});
+}).tag('@login').tag('@negative')
 
-
-Scenario('Link “Ainda não tem conta?” redireciona corretamente',  ({ I }) => {
+Scenario('Clique em criar conta deve ser redirecionado para tela de cadastro', ({ I }) => {
 
     I.amOnPage("http://automationpratice.com.br/login");
     I.click('#createAccount');
     I.waitForText('Cadastro de usuário',5)
 
-});
+}).tag('@login').tag('@regression')
 
-Scenario('Campo de e-mail sensível a letras maiúsculas/minúsculas',  ({ I }) => {
+Scenario('Login com email em caixa alta deve ser aceito corretamente.', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','TESTE@TESTE.COM')
-    I.fillField('#password','123456')
-    I.click('#btnLogin')
-    I.waitForText('Login realizado',5)
+    const uppercaseEmail = userFactory.createUppercaseEmail();
+    LoginPage.login(uppercaseEmail, "123456");
+    LoginPage.seeSuccess();
 
-});
+}).tag('@login').tag('@regression')
 
-Scenario('Validação de força mínima da senha',  ({ I }) => {
+Scenario('Login com senha fraca deve exibir mensagem de senha inválida.', ({ I }) => {
 
-    I.amOnPage("http://automationpratice.com.br/");
-    I.click('Login')
-    I.fillField('#user','teste@teste.com')
-    I.fillField('#password','123')
-    I.click('#btnLogin')
-    I.waitForText('Senha inválida.',5)
+    const user = userFactory.createUser()
+    LoginPage.login(user.email, "123")
+    LoginPage.seeErrorPassword()
 
-});
+}).tag('@login').tag('@negative')

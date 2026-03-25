@@ -13,7 +13,7 @@ exports.config = {
   helpers: {
     Playwright: {
       browser: 'chromium',
-      url: 'http://localhost',
+      url: "http://automationpratice.com.br/",
       show: true // colocar false caso não queira ver a tela 'funcionando', ou seja, não vai aparecer o passo a passo, mas irá rodar normalmente.
     }
   },
