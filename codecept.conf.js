@@ -14,7 +14,7 @@ exports.config = {
     Playwright: {
       browser: 'chromium',
       url: "http://automationpratice.com.br/",
-      show: true, // colocar false caso não queira ver a tela 'funcionando', ou seja, não vai aparecer o passo a passo, mas irá rodar normalmente.
+      show: false, // colocar false caso não queira ver a tela 'funcionando', ou seja, não vai aparecer o passo a passo, mas irá rodar normalmente.
       waitForTimeout: 5000
     }
   },
