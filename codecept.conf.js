@@ -1,30 +1,40 @@
 const { setHeadlessWhen, setCommonPlugins } = require('@codeceptjs/configure');
-// turn on headless mode when running with HEADLESS=true environment variable
-// export HEADLESS=true && npx codeceptjs run
-setHeadlessWhen(process.env.HEADLESS);
 
-// enable all common plugins https://github.com/codeceptjs/configure#setcommonplugins
+setHeadlessWhen(process.env.HEADLESS);
 setCommonPlugins();
 
 /** @type {CodeceptJS.MainConfig} */
 exports.config = {
   tests: './tests/*_test.js',
   output: './output',
+
   helpers: {
     Playwright: {
       browser: 'chromium',
       url: "http://automationpratice.com.br/",
-      show: false, // colocar false caso não queira ver a tela 'funcionando', ou seja, não vai aparecer o passo a passo, mas irá rodar normalmente.
-      waitForTimeout: 5000
+      show: false,
+      waitForTimeout: 5000,
+      use:{
+        screenshot:"only-on-failure"
+      }
     }
   },
+
   include: {
     I: './steps_file.js'
   },
+
   plugins: {
     htmlReporter: {
       enabled: true
+    },
+
+    allure: {
+      enabled: true,
+      require: "@codeceptjs/allure-legacy",
+      outputDir: "output/allure-results"
     }
   },
+
   name: 'CodeceptJS'
 }
