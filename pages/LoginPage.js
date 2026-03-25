@@ -21,11 +21,15 @@ class LoginPage {
     submit(){
         I.click(this.fields.loginButton)
     }
-    login(email,password){
-        this.fillEmail(email)
-        this.fillPassword(password)
-        this.submit()
-    }
+    login(email, password){
+    I.waitForElement(this.fields.email, 5)
+    I.waitForElement(this.fields.password, 5)
+    I.waitForElement(this.fields.loginButton,5)
+
+    this.fillEmail(email)
+    this.fillPassword(password)
+    this.submit()
+}
     seeSuccess(){
         I.waitForText("Login realizado", 5)
     }
